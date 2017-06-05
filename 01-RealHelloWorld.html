@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>01 - Real Hello World - WebGL Tutorial</title>
+</head>
+<body>
+
+<canvas style="border: 1px solid black">Canvas is not supported!</canvas>
+
+<script type="text/x-vertex-shader" id="vs">
+attribute vec2 aPosition;
+
+void main() {
+    gl_Position = vec4(aPosition, 0.0, 1.0);
+}
+</script>
+
+<script type="text/x-fragment-shader" id="fs">
+precision mediump float;
+
+uniform vec4 uColor;
+
+void main() {
+    gl_FragColor = uColor;
+}
+</script>
+
+<script type="text/javascript">
+var canvas = document.querySelector('canvas');
+var gl = canvas.getContext('webgl');
+
+var vsSource = document.getElementById('vs').innerHTML;
+var fsSource = document.getElementById('fs').innerHTML;
+
+// compile shaders & link program
+var vs = gl.createShader(gl.VERTEX_SHADER);
+gl.shaderSource(vs, vsSource);
+gl.compileShader(vs);
+
+var fs = gl.createShader(gl.FRAGMENT_SHADER);
+gl.shaderSource(fs, fsSource);
+gl.compileShader(fs);
+
+var program = gl.createProgram();
+gl.attachShader(program, vs);
+gl.attachShader(program, fs);
+gl.linkProgram(program);
+
+// get relevant locations
+var aPosition = gl.getAttribLocation(program, 'aPosition');
+var uColor = gl.getUniformLocation(program, 'uColor');
+
+// create a buffer holding a triangle
+var VBO = gl.createBuffer();
+var vertices = new Float32Array([0.0, -0.5, -0.5, 0.5, 0.5, 0.5]);
+gl.bindBuffer(gl.ARRAY_BUFFER, VBO);
+gl.bufferData(gl.ARRAY_BUFFER, vertices, gl.STATIC_DRAW);
+
+gl.enableVertexAttribArray(aPosition);
+gl.vertexAttribPointer(aPosition, 2, gl.FLOAT, false, 0, 0);
+
+// render
+gl.useProgram(program);
+gl.uniform4f(uColor, 1.0, 0.0, 0.5, 1.0);
+gl.drawArrays(gl.TRIANGLES, 0, 3);
+</script>
+
+</body>
+</html>
