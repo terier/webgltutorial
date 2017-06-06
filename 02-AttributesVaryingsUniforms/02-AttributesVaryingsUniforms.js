@@ -36,9 +36,9 @@ function load() {
     var program = programs.colorize;
 
     var positions = new Float32Array([
-        0.0, -0.5,
-        -0.5, 0.5,
-        0.5, 0.5
+        0.0, -0.9,
+        -0.8, 0.5,
+        0.8, 0.5
     ]);
 
     var colors = new Float32Array([
@@ -58,6 +58,8 @@ function load() {
     gl.bufferData(gl.ARRAY_BUFFER, colors, gl.STATIC_DRAW);
     gl.enableVertexAttribArray(program.attributes.aColor);
     gl.vertexAttribPointer(program.attributes.aColor, 4, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, null);
 
     gl.useProgram(program.program);
 
